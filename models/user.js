@@ -1,35 +1,46 @@
-var vogels = require('vogels');
+var sequelize = require('../database');
+var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt');
-var Joi = require('joi');
 
-vogels.AWS.config.loadFromPath('credentials.json');
-
-var User = vogels.define("User", {
-  hashKey : 'username',
-  tableName: 'User',
-  schema : {
-    username: Joi.string(),
-    email: Joi.string().email(),
-    password: Joi.string()
-  }
+var User = sequelize.define('user', {
+  username: {
+    type: Sequelize.STRING,
+    field: 'username'
+  },
+  email: {
+    type: Sequelize.STRING,
+    field: 'email'
+  },
+  password: {
+    type: Sequelize.STRING,
+    field: 'password'
+  },
+}, {
+  tableName: 'users',
+  instanceMethods: {
+		authenticate: function(password, callback) {
+      bcrypt.compare(password, this.password, function(err, isMatch) {
+        callback(null, isMatch);
+      });
+    }
+	}
 });
 
-User.before('create', function(data, next) {
-  if (!data.password) return next();
+User.beforeCreate(function(user, options, callback) {
+  console.log(options);
   bcrypt.genSalt(5, function(err, salt) {
-    if (err) return next(err);
-    bcrypt.hash(data.password, salt, function(err, hash) {
+    if (err) return err;
+    bcrypt.hash(user.password, salt, function(err, hash) {
       if (err) return next(err);
-      data.password = hash;
-      next(null, data);
+      user.password = hash;
+      callback(null, options);
     });
   });
-});
+})
 
+/*
 User.prototype.authenticate = function(password, callback) {
-   bcrypt.compare(password, this.attrs.password, function(err, isMatch) {
-     callback(null, isMatch);
-   });
- };
 
+ };
+*/
 module.exports = User;

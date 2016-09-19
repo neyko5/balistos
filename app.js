@@ -3,7 +3,6 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var mongoose=require('mongoose');
 var cors = require('cors')
 var routes = require('./routes/index');
 var playlists = require('./routes/playlists');
@@ -21,9 +20,6 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.set('superSecret', config.secret);
-
-mongoose.connect(config.database);
 
 app.use('/', routes);
 app.use('/playlists', playlists);

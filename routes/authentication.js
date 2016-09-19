@@ -6,28 +6,22 @@ var config = require('../config');
 var app = express();
 
 router.post('/register', function(req, res, next) {
-  var user = new User(req.body);
-  user.save(function(err) {
-    if (err) throw err;
-
-    console.log('User saved successfully');
+  User.create(req.body).then(function(user) {
     res.json({ success: true });
   });
 });
 
 router.post('/login', function(req, res, next) {
-  User.get(req.body.username, function(err, user) {
-
-    if (err) throw err;
-
+  User.findOne({ where: {username: req.body.username} }).then(function(user) {
     if (!user) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
     } else if (user) {
       user.authenticate(req.body.password, function(err, isMatch) {
         if (err) throw err;
 
+        console.log(user);
         if (isMatch) {
-          var token = jwt.sign(user.attrs, config.secret, {
+          var token = jwt.sign(user.dataValues, config.secret, {
             expiresIn: 60*60*24 // expires in 24 hours
           });
 
