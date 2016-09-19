@@ -8,6 +8,8 @@ var cors = require('cors')
 var routes = require('./routes/index');
 var playlists = require('./routes/playlists');
 var videos = require('./routes/videos');
+var authentication = require('./routes/authentication');
+var config = require('./config');
 
 var app = express();
 
@@ -19,15 +21,14 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.set('superSecret', config.secret);
 
-var dbName = 'balistos';
-var connectionString = 'mongodb://localhost:27017/' + dbName;
-
-mongoose.connect(connectionString);
+mongoose.connect(config.database);
 
 app.use('/', routes);
 app.use('/playlists', playlists);
 app.use('/videos', videos);
+app.use('/authentication', authentication);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

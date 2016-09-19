@@ -5,18 +5,18 @@ var PlaylistVideo = require('../models/playlistVideo');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  Playlist.find(function(err, playlists) {
+  Playlist.scan().loadAll().exec(function(err, playlists) {
     if (err) {
       return res.send(err);
     }
 
-    res.json(playlists);
+    res.json(playlists.Items);
   });
 });
 
 router.get('/:playlist_uri', function(req, res, next) {
 
-  Playlist.findOne({ 'uri': req.params.playlist_uri }).deepPopulate('videos.video').exec(function(err, playlist) {
+  Playlist.get(req.body.username, function(err, playlist){
     if (err) {
       return res.send(err);
     }

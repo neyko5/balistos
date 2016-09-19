@@ -1,15 +1,22 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var deepPopulate = require('mongoose-deep-populate')(mongoose);
+var vogels = require('vogels');
+var bcrypt = require('bcrypt');
+var Joi = require('joi');
 
-var PlaylistSchema = new Schema({
-  title: String,
-  description: String,
-  uri: String,
-  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  videos: [{type: Schema.Types.ObjectId, ref: 'PlaylistVideo'}],
-  chat: [{type: Schema.Types.ObjectId, ref: 'Chat'}]
+vogels.AWS.config.loadFromPath('credentials.json');
+
+var Playlist = vogels.define("Playlist", {
+  hashKey : 'uri',
+  tableName: 'Playlist',
+  schema : {
+    uri: Joi.string(),
+    title: Joi.string(),
+    description: Joi.string()
+  }
 });
-PlaylistSchema.plugin(deepPopulate, {});
 
-module.exports = mongoose.model('Playlist', PlaylistSchema);
+Playlist.before('create', function(data, next) {
+  data.uri = data.title.replace(' ','_').replace(/\W+/g, " ").toLowerCase();
+  next(null, data);
+});
+
+module.exports = Playlist;
