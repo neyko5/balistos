@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
-var jwt = require('jsonwebtoken');
 var config = require('../config');
 var app = express();
+var jwt = require('jwt-simple');
 
 router.post('/register', function(req, res, next) {
   User.create(req.body).then(function(user) {
@@ -12,7 +12,7 @@ router.post('/register', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-  User.findOne({ where: {username: req.body.username} }).then(function(user) {
+  User.findOne({ where: {username: req.body.username}}).then(function(user) {
     if (!user) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
     } else if (user) {
@@ -21,9 +21,10 @@ router.post('/login', function(req, res, next) {
 
         console.log(user);
         if (isMatch) {
-          var token = jwt.sign(user.dataValues, config.secret, {
-            expiresIn: 60*60*24 // expires in 24 hours
-          });
+          var token = jwt.encode({
+            id: user.dataValues.id,
+            exp: Date.now() + 7*60*60*24,
+          }, config.secret);
 
           res.json({
             success: true,

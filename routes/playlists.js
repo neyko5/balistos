@@ -1,24 +1,25 @@
 var express = require('express');
 var router = express.Router();
 var Playlist = require('../models/playlist');
+var PlaylistVideo = require('../models/playlistVideo');
+var Video = require('../models/video');
+var User = require('../models/user');
+var jwtauth = require('../auth/jwtauth');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  Playlist.scan().loadAll().exec(function(err, playlists) {
-    if (err) {
-      return res.send(err);
-    }
-
-    res.json(playlists.Items);
+  Playlist.findAll({include: [{model: User, attributes: ['username']}, {model: PlaylistVideo, include: [Video]}]})
+  .then(function(playlists) {
+    res.json(playlists);
   });
 });
 
 router.get('/:playlist_uri', function(req, res, next) {
-
-  Playlist.get(req.body.username, function(err, playlist){
-    if (err) {
-      return res.send(err);
-    }
+  Playlist.findOne({where: {uri: req.params.playlist_uri},
+                    include: [
+                      {model: User, attributes: ['username']},
+                      {model: PlaylistVideo, include: [Video]}
+                    ]}).then(function(playlist){
     res.json(playlist);
   });
 });

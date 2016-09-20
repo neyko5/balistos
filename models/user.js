@@ -3,6 +3,11 @@ var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt');
 
 var User = sequelize.define('user', {
+  id: {
+    type: Sequelize.INTEGER,
+    field: 'id',
+    primaryKey: true
+  },
   username: {
     type: Sequelize.STRING,
     field: 'username'
@@ -17,11 +22,17 @@ var User = sequelize.define('user', {
   },
 }, {
   tableName: 'users',
+  underscored: true,
   instanceMethods: {
 		authenticate: function(password, callback) {
       bcrypt.compare(password, this.password, function(err, isMatch) {
         callback(null, isMatch);
       });
+    },
+    toJSON: function () {
+      var values = this.get();
+      delete values.password;
+      return values;
     }
 	}
 });
@@ -38,9 +49,4 @@ User.beforeCreate(function(user, options, callback) {
   });
 })
 
-/*
-User.prototype.authenticate = function(password, callback) {
-
- };
-*/
 module.exports = User;
