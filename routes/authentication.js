@@ -18,12 +18,10 @@ router.post('/login', function(req, res, next) {
     } else if (user) {
       user.authenticate(req.body.password, function(err, isMatch) {
         if (err) throw err;
-
-        console.log(user);
         if (isMatch) {
           var token = jwt.encode({
             id: user.dataValues.id,
-            exp: Date.now() + 7*60*60*24,
+            exp: Date.now() + 7*60*60*24*1000,
           }, config.secret);
 
           res.json({
@@ -35,7 +33,6 @@ router.post('/login', function(req, res, next) {
         };
       });
     }
-
   });
 });
 

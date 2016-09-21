@@ -5,13 +5,12 @@ var Playlist = require('./playlist');
 var User = require('./user');
 var Video = require('./video');
 
-console.log(Playlist);
-
 var PlaylistVideo = sequelize.define('playlistVideo', {
   id: {
     type: Sequelize.INTEGER,
     field: 'id',
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
 }, {
   tableName: 'playlist_videos',

@@ -4,6 +4,7 @@ var Playlist = require('../models/playlist');
 var PlaylistVideo = require('../models/playlistVideo');
 var Video = require('../models/video');
 var User = require('../models/user');
+var Chat = require('../models/chat');
 var jwtauth = require('../auth/jwtauth');
 
 /* GET home page. */
@@ -18,20 +19,22 @@ router.get('/:playlist_uri', function(req, res, next) {
   Playlist.findOne({where: {uri: req.params.playlist_uri},
                     include: [
                       {model: User, attributes: ['username']},
-                      {model: PlaylistVideo, include: [Video]}
+                      {model: PlaylistVideo, include: [Video]},
+                      {model: Chat, include: [
+                         {model: User, attributes: ['username']}
+                      ]}
                     ]}).then(function(playlist){
     res.json(playlist);
   });
 });
 
-router.post('/', function(req, res, next) {
-  var playlist = new Playlist(req.body);
-  playlist.save(function(err) {
-    if (err) {
-      return res.send(err);
-    }
-
-    res.send({ message: 'Playlist Created' });
+router.post('/', jwtauth, function(req, res, next) {
+  Playlist.create({
+    title : req.body.title,
+    description: req.body.description,
+    user_id: req.user_id
+  }).then(function(user) {
+    res.json({ success: true });
   });
 });
 

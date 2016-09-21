@@ -5,7 +5,8 @@ var Video = sequelize.define('video', {
   id: {
     type: Sequelize.INTEGER,
     field: 'id',
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   title: {
     type: Sequelize.STRING,

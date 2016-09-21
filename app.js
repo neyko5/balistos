@@ -7,13 +7,32 @@ var cors = require('cors')
 var routes = require('./routes/index');
 var playlists = require('./routes/playlists');
 var videos = require('./routes/videos');
+var chats = require('./routes/chats');
 var authentication = require('./routes/authentication');
 var config = require('./config');
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 app.options('*', cors());
 app.use(cors());
+
+io.on('connection', function(socket){
+  socket.on('join', function(room){
+    console.log("user is joining " + room);
+    socket.join(room);
+  });
+  socket.on('leave', function(room){
+    console.log("user is leaving " + room);
+    socket.leave(room);
+  });
+});
+
+app.use(function(req, res, next){
+  res.io = io;
+  next();
+});
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -25,6 +44,9 @@ app.use('/', routes);
 app.use('/playlists', playlists);
 app.use('/videos', videos);
 app.use('/authentication', authentication);
+app.use('/chat', chats);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -50,4 +72,4 @@ app.use(function(err, req, res, next) {
 });
 
 
-module.exports = app;
+module.exports = {app: app, server: server};
