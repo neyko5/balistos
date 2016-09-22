@@ -1,27 +1,14 @@
 var express = require('express');
 var router = express.Router();
-var Video = require('../models/video');
+var playlists = require('./playlists');
+var videos = require('./videos');
+var chats = require('./chats');
+var authentication = require('./authentication');
+var app = express();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  Video.find(function(err, videos) {
-    if (err) {
-      return res.send(err);
-    }
+app.use('/playlists', playlists);
+app.use('/videos', videos);
+app.use('/authentication', authentication);
+app.use('/chat', chats);
 
-    res.json(videos);
-  });
-});
-
-router.get('/add', function(req, res, next) {
-  var video = new Video({title: "Life is strange", youtube_id: "Bh1Pr6ef_XI"});
-  video.save(function(err) {
-    if (err) {
-      return res.send(err);
-    }
-
-    res.send({ message: 'Movie Added' });
-  });
-});
-
-module.exports = router;
+module.exports = app;

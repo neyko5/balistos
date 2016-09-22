@@ -4,6 +4,7 @@ var Sequelize = require('sequelize');
 var Playlist = require('./playlist');
 var User = require('./user');
 var Video = require('./video');
+var Like = require('./like');
 
 var PlaylistVideo = sequelize.define('playlistVideo', {
   id: {
@@ -19,5 +20,6 @@ var PlaylistVideo = sequelize.define('playlistVideo', {
 
 PlaylistVideo.belongsTo(Video);
 PlaylistVideo.belongsTo(User);
+PlaylistVideo.hasMany(Like);
 
 module.exports = PlaylistVideo;

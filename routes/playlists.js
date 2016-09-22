@@ -5,7 +5,8 @@ var PlaylistVideo = require('../models/playlistVideo');
 var Video = require('../models/video');
 var User = require('../models/user');
 var Chat = require('../models/chat');
-var jwtauth = require('../auth/jwtauth');
+var Like = require('../models/like');
+var jwtauth = require('../middleware/jwtauth');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -15,15 +16,17 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.get('/:playlist_uri', function(req, res, next) {
-  Playlist.findOne({where: {uri: req.params.playlist_uri},
-                    include: [
-                      {model: User, attributes: ['username']},
-                      {model: PlaylistVideo, include: [Video]},
-                      {model: Chat, include: [
-                         {model: User, attributes: ['username']}
-                      ]}
-                    ]}).then(function(playlist){
+router.get('/:playlist_id', function(req, res, next) {
+  Playlist.findOne({where: {id: req.params.playlist_id},
+    include: [
+      {model: User, attributes: ['username']},
+      {model: PlaylistVideo, include:[Video, Like,
+        {model: User, attributes: ['username']}
+      ]},
+      {model: Chat, include: [
+         {model: User, attributes: ['username']}
+      ]}
+  ]}).then(function(playlist){
     res.json(playlist);
   });
 });

@@ -15,10 +15,6 @@ var Playlist = sequelize.define('playlist', {
     type: Sequelize.STRING,
     field: 'title'
   },
-  uri: {
-    type: Sequelize.STRING,
-    field: 'uri'
-  },
   description: {
     type: Sequelize.TEXT,
     field: 'description'
@@ -26,11 +22,6 @@ var Playlist = sequelize.define('playlist', {
 }, {
   tableName: 'playlists',
   underscored: true,
-});
-
-Playlist.beforeCreate(function(playlist, options, callback) {
-  playlist.uri = playlist.title.replace(' ','_').replace(/\W+/g,'');
-  callback(null, options);
 });
 
 Playlist.belongsTo(User);

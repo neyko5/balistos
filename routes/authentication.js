@@ -1,13 +1,23 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
-var config = require('../config');
-var app = express();
 var jwt = require('jwt-simple');
+require('dotenv').load();
 
 router.post('/register', function(req, res, next) {
   User.create(req.body).then(function(user) {
-    res.json({ success: true });
+    var token = jwt.encode({
+      id: user.dataValues.id,
+      username: user.dataValues.username,
+      exp: Date.now() + 30*60*60*24*1000,
+    }, process.env.SECRET);
+
+    res.json({
+      success: true,
+      token: token,
+      user_id: user.dataValues.id,
+      username: user.dataValues.username
+    });
   });
 });
 
@@ -17,16 +27,19 @@ router.post('/login', function(req, res, next) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
     } else if (user) {
       user.authenticate(req.body.password, function(err, isMatch) {
-        if (err) throw err;
+        if (err) res.json({ success: false, message: 'Authentication failed. Wrong password.', 'user': user });
         if (isMatch) {
           var token = jwt.encode({
             id: user.dataValues.id,
-            exp: Date.now() + 7*60*60*24*1000,
-          }, config.secret);
+            username: user.dataValues.username,
+            exp: Date.now() + 30*60*60*24*1000,
+          }, process.env.SECRET);
 
           res.json({
             success: true,
-            token: token
+            token: token,
+            user_id: user.dataValues.id,
+            username: user.dataValues.username
           });
         } else {
            res.json({ success: false, message: 'Authentication failed. Wrong password.', 'user': user });
@@ -35,5 +48,6 @@ router.post('/login', function(req, res, next) {
     }
   });
 });
+
 
 module.exports = router;
