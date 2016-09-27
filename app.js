@@ -7,6 +7,7 @@ var cors = require('cors')
 var routes = require('./routes');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var PlaylistUser = require('./models/playlistUser');
 require('dotenv').config()
 
 app.options('*', cors());
@@ -14,10 +15,26 @@ app.use(cors());
 
 io.on('connection', function(socket){
   socket.on('join', function(room){
-    socket.join(room);
+    socket.join("playlist_" + room.playlist);
+    PlaylistUser.findOrCreate({where: {playlist_id: room.playlist, username: room.username}}).spread((playlistUser, created) => {
+       playlistUser.increment({
+          'count': 1
+        });
+        if(!playlistUser.dataValues.count || playlistUser.dataValues.count === 0) {
+          io.to("playlist_" + room.playlist).emit('action', { type: "ADD_USER", user: {username: room.username}});
+        }
+    });
   });
   socket.on('leave', function(room){
-    socket.leave(room);
+    socket.leave("playlist_" + room.playlist);
+    PlaylistUser.findOne({ where: {playlist_id: room.playlist, username: room.username}, limit: 1}).then((playlistUser) => {
+      playlistUser.decrement({
+         'count': 1
+       });
+       if(playlistUser.dataValues.count < 2) {
+         io.to("playlist_" + room.playlist).emit('action', { type: "REMOVE_USER", user: {username: room.username}});
+       }
+    });
   });
 });
 
