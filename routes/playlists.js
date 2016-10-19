@@ -10,14 +10,6 @@ var Chat = require('../models/chat');
 var Like = require('../models/like');
 var jwtauth = require('../middleware/jwtauth');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  Playlist.findAll({limit: 10, include: [{model: User, attributes: ['username']}, {model: PlaylistVideo, include: [Video]}]})
-  .then(function(playlists) {
-    res.json(playlists);
-  });
-});
-
 router.get('/search', function(req, res, next) {
   Playlist.findAll({ where: {
     $or: [
