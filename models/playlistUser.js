@@ -2,7 +2,6 @@ var sequelize = require('../database');
 var Sequelize = require('sequelize');
 
 var Playlist = require('./playlist');
-var User = require('./user');
 
 var PlaylistUser = sequelize.define('playlistUser', {
   id: {
