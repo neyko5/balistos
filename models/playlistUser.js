@@ -1,6 +1,9 @@
 var sequelize = require('../database');
 var Sequelize = require('sequelize');
 
+var Playlist = require('./playlist');
+var User = require('./user');
+
 var PlaylistUser = sequelize.define('playlistUser', {
   id: {
     type: Sequelize.INTEGER,
@@ -10,19 +13,13 @@ var PlaylistUser = sequelize.define('playlistUser', {
   },
   username: {
     type: Sequelize.STRING,
-    field: 'username',
-  },
-  playlist_id: {
-    type: Sequelize.INTEGER,
-    field: 'playlist_id'
-  },
-  count: {
-    type: Sequelize.INTEGER,
-    field: 'count'
+    field: 'username'
   },
 }, {
   tableName: 'playlist_users',
   underscored: true,
 });
+
+PlaylistUser.belongsTo(Playlist);
 
 module.exports = PlaylistUser;
