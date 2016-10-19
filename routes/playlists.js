@@ -3,6 +3,7 @@ var router = express.Router();
 var Sequelize = require('sequelize');
 var Playlist = require('../models/playlist');
 var PlaylistVideo = require('../models/playlistVideo');
+var PlaylistUser = require('../models/playlistUser');
 var Video = require('../models/video');
 var User = require('../models/user');
 var Chat = require('../models/chat');
