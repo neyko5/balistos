@@ -12,6 +12,7 @@ router.post('/send', jwtauth, function(req, res, next) {
   }).then(function(message){
         User.findOne({where:{id: req.user_id}}).then(function(user){
           message.dataValues.user = user.dataValues;
+          console.log("emitting to ", "playlist_" + req.body.playlist_id)
           res.io.to("playlist_" + req.body.playlist_id).emit('action', { type: "INSERT_MESSAGE", message: message.dataValues });
           res.json({ success: true });
         });

@@ -14,10 +14,11 @@ app.use(cors());
 
 io.on('connection', function(socket){
   socket.on('join', function(room){
-    socket.join("playlist_" + room);
+    socket.join(room);
+    console.log("joining ", room)
   });
   socket.on('leave', function(room){
-    socket.leave("playlist_" + room);
+    socket.leave(room);
   });
 });
 

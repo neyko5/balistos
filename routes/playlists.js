@@ -30,6 +30,13 @@ router.get('/search', function(req, res, next) {
   });
 });
 
+router.get('/', function(req, res, next) {
+  Playlist.findAll({limit: 10 , include: [{model: User, attributes: ['username']}, {model: PlaylistVideo, include: [Video]}]})
+      .then(function(playlists) {
+        res.json(playlists);
+      });
+});
+
 router.post('/heartbeat', function(req, res, next) {
   PlaylistUser.findOrCreate({ where: { username: req.body.username, playlist_id: req.body.playlist_id }}).spread(function(result, created) {
     PlaylistUser.update(
