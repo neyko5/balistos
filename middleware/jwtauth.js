@@ -1,6 +1,9 @@
 var User = require('../models/user');
 var jwt = require('jwt-simple');
-require('dotenv').load();
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').load();
+}
+
 
 module.exports = function(req, res, next) {
   if(req.headers && req.headers.authorization){
