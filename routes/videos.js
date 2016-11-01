@@ -40,4 +40,23 @@ router.post('/like', jwtauth, function(req, res, next) {
   });
 });
 
+router.post('/finish', jwtauth, function(req, res, next) {
+  PlaylistVideo.findOne({where: {id: req.body.video_id}}).then(function(video) {
+    video.update({active: 0}).then(function(result) {
+      res.io.to("playlist_" + video.playlist_id).emit('action', {type: "DEACTIVATE_VIDEO", video_id: video.id});
+      res.json({success: true});
+    });
+  });
+});
+
+router.post('/delete', jwtauth, function(req, res, next) {
+  PlaylistVideo.findOne({where: {id: req.body.video_id}}).then(function(video) {
+    video.destroy().then(function(result) {
+      res.io.to("playlist_" + video.playlist_id).emit('action', {type: "REMOVE_VIDEO", video_id: video.id});
+      res.json({success: true});
+    });
+  });
+});
+
+
 module.exports = router;

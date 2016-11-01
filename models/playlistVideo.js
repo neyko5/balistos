@@ -13,6 +13,10 @@ var PlaylistVideo = sequelize.define('playlistVideo', {
     primaryKey: true,
     autoIncrement: true
   },
+  active: {
+    type: Sequelize.BOOLEAN,
+    field: 'active'
+  },
 }, {
   tableName: 'playlist_videos',
   underscored: true,

@@ -54,7 +54,7 @@ router.get('/:playlist_id', function(req, res, next) {
   Playlist.findOne({where: {id: req.params.playlist_id},
     include: [
       {model: User, attributes: ['username']},
-      {model: PlaylistVideo, include:[Video, Like,
+      {model: PlaylistVideo, where: {active: 1}, include:[Video, Like,
         {model: User, attributes: ['username']}
       ]},
       {model: Chat, include: [
