@@ -60,16 +60,23 @@ router.get('/:playlist_id', function(req, res, next) {
   Playlist.findOne({where: {id: req.params.playlist_id},
     include: [
       {model: User, attributes: ['username']},
-      {model: PlaylistVideo, include:[
-        {model: Video},
-        {model: Like, include: {model: User, attributes: ['username']}},
-        {model: User, attributes: ['username']}
-      ]},
       {model: Chat, include: [
          {model: User, attributes: ['username']}
       ]}
   ]}).then(function(playlist){
-    res.json(playlist);
+    PlaylistVideo.findAll({
+      where: {
+        playlist_id: playlist.id,
+        active: 1
+      },
+      include:[
+        {model: Video},
+        {model: Like, include: {model: User, attributes: ['username']}},
+        {model: User, attributes: ['username']}
+      ]}).then(function(playlistVideos) {
+        playlist.playlistVideos = playlistVideos;
+        res.json(playlist);
+      });
   });
 });
 
