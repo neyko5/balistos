@@ -79,7 +79,12 @@ router.post('/', jwtauth, function(req, res, next) {
     description: req.body.description,
     user_id: req.user_id
   }).then(function(playlist) {
-    res.json({ success: true, id: playlist.id });
+    Playlist.findOne({where: {id: playlist.id},
+      include: [
+        {model: User, attributes: ['username']}
+      ]}).then(function(playlistResult){
+        res.json({ success: true, playlist: playlistResult });
+    });
   });
 });
 
