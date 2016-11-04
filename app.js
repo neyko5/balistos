@@ -13,7 +13,6 @@ if(process.env.NODE_ENV !== 'production'){
 
 app.options('*', cors());
 app.use(cors());
-app.set('etag', false);
 
 io.on('connection', function(socket){
   socket.on('join', function(room){
