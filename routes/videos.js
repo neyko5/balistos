@@ -28,14 +28,16 @@ router.post('/add', jwtauth, function(req, res, next) {
 
 router.post('/like', jwtauth, function(req, res, next) {
   Like.findOrCreate({
-    where: { playlist_video_id: req.body.video_id, user_id: req.user_id }
+    where: { playlist_video_id: req.body.video_id, user_id: req.user_id },
   }).spread(function(like, created){
     like.update({
       value: req.body.value
     }).then((result) => {
-      PlaylistVideo.findById(req.body.video_id).then((playlistVideo) => {
-        res.io.to("playlist_" + playlistVideo.playlist_id).emit('action', { type: "UPDATE_OR_INSERT_LIKE", like: result });
-        res.json({ success: true });
+      Like.findOne({ where: {id: like.id}, include: [{model: User, attributes: ['username']}]}).then((likeResult) => {
+        PlaylistVideo.findById(req.body.video_id).then((playlistVideo) => {
+          res.io.to("playlist_" + playlistVideo.playlist_id).emit('action', { type: "UPDATE_OR_INSERT_LIKE", like: likeResult });
+          res.json({ success: true });
+        });
       });
     });
   });

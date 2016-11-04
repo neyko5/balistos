@@ -37,7 +37,7 @@ router.get('/', function(req, res, next) {
       });
 });
 
-router.post('/heartbeat', function(req, res, next) {
+router.post('/heartbeat', jwtauth, function(req, res, next) {
   PlaylistUser.findOrCreate({ where: { username: req.body.username, playlist_id: req.body.playlist_id }}).spread(function(result, created) {
     PlaylistUser.update(
         { updated_at: null },
@@ -50,11 +50,19 @@ router.post('/heartbeat', function(req, res, next) {
   });
 });
 
+router.get('/users/:playlist_id', function(req, res, next) {
+  PlaylistUser.findAll({where: { playlist_id: req.params.playlist_id, updated_at: {gt: (new Date() - 60000)}}, attributes: ['username']}).then(function(results) {
+    res.json(results);
+  });
+});
+
 router.get('/:playlist_id', function(req, res, next) {
   Playlist.findOne({where: {id: req.params.playlist_id},
     include: [
       {model: User, attributes: ['username']},
-      {model: PlaylistVideo, where: {active: 1}, include:[Video, Like,
+      {model: PlaylistVideo, where: {active: 1}, include:[
+        Video,
+        {model: Like, include: {model: User, attributes: ['username']}},
         {model: User, attributes: ['username']}
       ]},
       {model: Chat, include: [
