@@ -59,25 +59,18 @@ router.get('/users/:playlist_id', function(req, res, next) {
 router.get('/:playlist_id', function(req, res, next) {
   Playlist.findOne({where: {id: req.params.playlist_id},
     include: [
-      {model: User, attributes: ['username']},
-      {model: Chat, include: [
-         {model: User, attributes: ['username']}
-      ]}
-  ]}).then(function(playlist){
-    PlaylistVideo.findAll({
-      where: {
-        playlist_id: playlist.id,
-        active: 1
-      },
-      include:[
+      {model: PlaylistVideo, include:[
         {model: Video},
         {model: Like, include: {model: User, attributes: ['username']}},
         {model: User, attributes: ['username']}
-      ]}).then(function(playlistVideos) {
-        playlist.playlistVideos = playlistVideos;
-        res.json(playlist);
-      });
-  });
+      ], where: {active: 1}, required: false},
+      {model: User, attributes: ['username']},
+      {model: Chat, include: [
+        {model: User, attributes: ['username']}
+      ]}
+    ]}).then(function(playlist){
+      res.json(playlist);
+    });
 });
 
 router.post('/', jwtauth, function(req, res, next) {
