@@ -32,7 +32,7 @@ router.get('/search', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-    sequelize.query("SELECT playlists.title, playlists.description, users.username, COUNT(playlist_videos.video_id) as count FROM users, playlists, playlist_videos WHERE users.id = playlists.user_id AND playlists.id = playlist_videos.playlist_id GROUP BY playlists.id ORDER BY count DESC", { type: sequelize.QueryTypes.SELECT})
+    sequelize.query("SELECT playlists.id, playlists.title, playlists.description, users.username, COUNT(playlist_videos.video_id) as count FROM users, playlists, playlist_videos WHERE users.id = playlists.user_id AND playlists.id = playlist_videos.playlist_id GROUP BY playlists.id ORDER BY count DESC", { type: sequelize.QueryTypes.SELECT})
         .then(function(playlists) {
             res.json(playlists);
         })
