@@ -17,6 +17,17 @@ var PlaylistVideo = sequelize.define('playlistVideo', {
     type: Sequelize.BOOLEAN,
     field: 'active'
   },
+  started_at:  {
+    type     : Sequelize.INTEGER,
+    allowNull: true,
+    get      : function()  {
+      if(this.getDataValue('started_at')){
+        return Math.round((new Date() - this.getDataValue('started_at'))/1000);
+      } else {
+        return 0;
+      }
+    },
+  },
 }, {
   tableName: 'playlist_videos',
   underscored: true,

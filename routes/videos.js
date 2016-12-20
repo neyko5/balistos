@@ -52,6 +52,14 @@ router.post('/finish', jwtauth, function(req, res, next) {
   });
 });
 
+router.post('/start', jwtauth, function(req, res, next) {
+  PlaylistVideo.findOne({where: {id: req.body.video_id}}).then(function(video) {
+    if(!video.started_at) {
+      video.update({started_at: new Date()});
+    }
+  });
+});
+
 router.post('/delete', jwtauth, function(req, res, next) {
   PlaylistVideo.findOne({where: {id: req.body.video_id}}).then(function(video) {
     video.destroy().then(function(result) {
