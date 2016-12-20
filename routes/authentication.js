@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var jwt = require('jwt-simple');
+var jwtauth = require('../middleware/jwtauth');
 if(process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
@@ -60,6 +61,10 @@ router.post('/login', function(req, res, next) {
       });
     }
   });
+});
+
+router.get('/verify', jwtauth, function(req, res, next) {
+   res.json({ success: true, message: 'Token is valid.' });
 });
 
 
