@@ -23,10 +23,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `chats` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
-  `playlist_id` int(11) NOT NULL,
+  `playlistId` int(11) NOT NULL,
   `message` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NULL DEFAULT NULL,
+  `updatedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -37,11 +37,11 @@ CREATE TABLE `chats` (
 
 CREATE TABLE `likes` (
   `id` int(11) NOT NULL,
-  `playlist_video_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `playlistVideoId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
   `value` int(11) DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NULL DEFAULT NULL,
+  `updatedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -52,11 +52,11 @@ CREATE TABLE `likes` (
 
 CREATE TABLE `playlists` (
   `id` int(10) UNSIGNED NOT NULL,
-  `user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `userId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NULL DEFAULT NULL,
+  `updatedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -67,10 +67,10 @@ CREATE TABLE `playlists` (
 
 CREATE TABLE `playlist_users` (
   `id` int(11) NOT NULL,
-  `playlist_id` int(11) NOT NULL,
+  `playlistId` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NULL DEFAULT NULL,
+  `updatedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -81,12 +81,12 @@ CREATE TABLE `playlist_users` (
 
 CREATE TABLE `playlist_videos` (
   `id` int(11) NOT NULL,
-  `playlist_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `video_id` int(11) NOT NULL,
+  `playlistId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `videoId` int(11) NOT NULL,
   `active` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NULL DEFAULT NULL,
+  `updatedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -99,8 +99,8 @@ CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NULL DEFAULT NULL,
+  `updatedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -111,10 +111,10 @@ CREATE TABLE `users` (
 
 CREATE TABLE `videos` (
   `id` int(10) UNSIGNED NOT NULL,
-  `youtube_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `youtubeId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NULL DEFAULT NULL,
+  `updatedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

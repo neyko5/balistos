@@ -15,22 +15,21 @@ module.exports = function(req, res, next) {
         try {
           var decoded = jwt.decode(token, process.env.SECRET);
           if (decoded.exp <= Date.now()) {
-            res.end('Access token has expired', 403);
+            res.end('Access token has expired', 401);
           }
           else{
-            req.user_id = decoded.id;
+            req.userId = decoded.id;
             req.username
             next()
           }
         } catch (err) {
-          return res.send(403);
+          return res.send(401);
         }
     } else {
-      return res.send(403);
+      return res.send(401);
     }
   }
   else{
-    return res.send(403);
+    return res.send(401);
   }
-
 };

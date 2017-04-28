@@ -20,8 +20,7 @@ var Playlist = sequelize.define('playlist', {
     field: 'description'
   },
 }, {
-  tableName: 'playlists',
-  underscored: true,
+  tableName: 'playlists'
 });
 
 Playlist.belongsTo(User);

@@ -17,16 +17,16 @@ router.post('/register', function(req, res, next) {
             exp: Date.now() + 30*60*60*24*1000,
           }, process.env.SECRET);
 
-          res.json({
+          res.status(201).json({
             success: true,
             token: token,
-            user_id: user.dataValues.id,
+            userId: user.dataValues.id,
             username: user.dataValues.username
           });
         });
       }
       else{
-         res.status(400).json({ success: false, message: 'Username is already taken.' });
+         res.status(409).json({ success: false, message: 'Username is already taken.' });
       }
     });
   } else {
@@ -52,11 +52,11 @@ router.post('/login', function(req, res, next) {
           res.json({
             success: true,
             token: token,
-            user_id: user.dataValues.id,
+            userId: user.dataValues.id,
             username: user.dataValues.username
           });
         } else {
-           res.json({ success: false, message: 'Invalid credentials.' });
+           res.status(401).json({ success: false, message: 'Invalid credentials.' });
         };
       });
     }

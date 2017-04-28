@@ -25,40 +25,56 @@ router.get('/search', function(req, res, next) {
         }
       }
     ]
-  }, limit: 10 , include: [{model: User, attributes: ['username']}, {model: PlaylistVideo, include: [Video]}]})
+  }, limit: 10 , include: [{model: User, attributes: ['username']}]})
   .then(function(playlists) {
     res.json(playlists);
   });
 });
 
 router.get('/', function(req, res, next) {
-    sequelize.query("SELECT playlists.id, playlists.title, playlists.description, users.username, COUNT(playlist_videos.video_id) as count FROM users, playlists, playlist_videos WHERE users.id = playlists.user_id AND playlists.id = playlist_videos.playlist_id GROUP BY playlists.id ORDER BY count DESC", { type: sequelize.QueryTypes.SELECT})
+    sequelize.query(`SELECT playlists.id, playlists.title, playlists.description, users.username, COUNT(playlistVideos.videoId) as count 
+                     FROM users, playlists, playlistVideos 
+                     WHERE users.id = playlists.userId AND playlists.id = playlistVideos.playlistId 
+                     GROUP BY playlists.id 
+                     ORDER BY count DESC`, 
+                     { type: sequelize.QueryTypes.SELECT})
         .then(function(playlists) {
             res.json(playlists);
         })
 });
 
 router.post('/heartbeat', jwtauth, function(req, res, next) {
-  PlaylistUser.findOrCreate({ where: { username: req.body.username, playlist_id: req.body.playlist_id }}).spread(function(result, created) {
+  PlaylistUser.findOrCreate({ 
+      where: { username: req.body.username, 
+               playlistId: req.body.playlistId 
+      }})
+      .spread(function(result, created) {
     PlaylistUser.update(
-        { updated_at: null },
-        {where: { username: req.body.username, playlist_id: req.body.playlist_id }}
+        { updatedAt: null },
+        {where: { username: req.body.username, playlistId: req.body.playlistId }}
     ).then(function(response){
-        PlaylistUser.findAll({where: { playlist_id: req.body.playlist_id, updated_at: {gt: (new Date() - 60000)}}, attributes: ['username']}).then(function(results) {
+        PlaylistUser.findAll({
+          where: { playlistId: req.body.playlistId, 
+                   updatedAt: {gt: (new Date() - 60000)}}, 
+                   attributes: ['username']})
+        .then(function(results) {
           res.json(results);
         });
     });
   });
 });
 
-router.get('/users/:playlist_id', function(req, res, next) {
-  PlaylistUser.findAll({where: { playlist_id: req.params.playlist_id, updated_at: {gt: (new Date() - 60000)}}, attributes: ['username']}).then(function(results) {
+router.get('/users/:playlistId', function(req, res, next) {
+  PlaylistUser.findAll({
+    where: { playlistId: req.params.playlistId, updatedAt: {gt: (new Date() - 60000)}}, 
+    attributes: ['username']})
+  .then(function(results) {
     res.json(results);
   });
 });
 
-router.get('/:playlist_id', function(req, res, next) {
-  Playlist.findOne({where: {id: req.params.playlist_id},
+router.get('/:playlistId', function(req, res, next) {
+  Playlist.findOne({where: {id: req.params.playlistId},
     include: [
       {model: PlaylistVideo, include:[
         {model: Video},
@@ -78,7 +94,7 @@ router.post('/', jwtauth, function(req, res, next) {
   Playlist.create({
     title : req.body.title,
     description: req.body.description,
-    user_id: req.user_id
+    userId: req.userId
   }).then(function(playlist) {
     res.json({ success: true, id: playlist.id });
   });

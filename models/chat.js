@@ -15,8 +15,7 @@ var Chat = sequelize.define('chats', {
     field: 'message'
   },
 }, {
-  tableName: 'chats',
-  underscored: true,
+  tableName: 'chats'
 });
 
 Chat.belongsTo(User);

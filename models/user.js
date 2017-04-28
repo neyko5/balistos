@@ -19,7 +19,6 @@ var User = sequelize.define('user', {
   },
 }, {
   tableName: 'users',
-  underscored: true,
   instanceMethods: {
 		authenticate: function(password, callback) {
       bcrypt.compare(password, this.password, function(err, isMatch) {

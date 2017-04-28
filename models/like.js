@@ -14,8 +14,7 @@ var Like = sequelize.define('likes', {
     field: 'value'
   },
 }, {
-  tableName: 'likes',
-  underscored: true,
+  tableName: 'likes'
 });
 
 Like.belongsTo(User);

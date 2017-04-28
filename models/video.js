@@ -12,13 +12,12 @@ var Video = sequelize.define('video', {
     type: Sequelize.STRING,
     field: 'title'
   },
-  youtube_id: {
+  youtubeId: {
     type: Sequelize.STRING,
-    field: 'youtube_id'
+    field: 'youtubeId'
   },
 }, {
-  tableName: 'videos',
-  underscored: true,
+  tableName: 'videos'
 });
 
 module.exports = Video;

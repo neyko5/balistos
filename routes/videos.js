@@ -9,18 +9,18 @@ var jwtauth = require('../middleware/jwtauth');
 
 router.post('/add', jwtauth, function(req, res, next) {
   Video.findOrCreate({
-    where: { youtube_id: req.body.youtube_id},
+    where: { youtubeId: req.body.youtubeId},
     defaults: { title: req.body.title }
   }).spread(function(video, created){
     PlaylistVideo.create({
-      user_id: req.user_id,
-      playlist_id: req.body.playlist_id,
-      video_id: video.id,
+      userId: req.userId,
+      playlistId: req.body.playlistId,
+      videoId: video.id,
       active: 1
     }).then(function(playlistVideo){
       PlaylistVideo.findOne({ where: {id: playlistVideo.id}, include: [User, Video, Like]}).then(function(videoResult){
-        res.io.to("playlist_" + req.body.playlist_id).emit('action', { type: "INSERT_VIDEO", video: videoResult });
-        res.json({ success: true });
+        res.io.to("playlist_" + req.body.playlistId).emit('action', { type: "INSERT_VIDEO", video: videoResult });
+        res.status(201).json({ success: true, message: 'Video successfully added.' });
       });
     });
   });
@@ -28,15 +28,15 @@ router.post('/add', jwtauth, function(req, res, next) {
 
 router.post('/like', jwtauth, function(req, res, next) {
   Like.findOrCreate({
-    where: { playlist_video_id: req.body.video_id, user_id: req.user_id },
+    where: { playlistVideoId: req.body.videoId, userId: req.userId },
   }).spread(function(like, created){
     like.update({
       value: req.body.value
     }).then((result) => {
       Like.findOne({ where: {id: like.id}, include: [{model: User, attributes: ['username']}]}).then((likeResult) => {
-        PlaylistVideo.findById(req.body.video_id).then((playlistVideo) => {
-          res.io.to("playlist_" + playlistVideo.playlist_id).emit('action', { type: "UPDATE_OR_INSERT_LIKE", like: likeResult });
-          res.json({ success: true });
+        PlaylistVideo.findById(req.body.videoId).then((playlistVideo) => {
+          res.io.to("playlist_" + playlistVideo.playlistId).emit('action', { type: "UPDATE_OR_INSERT_LIKE", like: likeResult });
+          res.json({ success: true, message: 'Video successfully liked.' });
         });
       });
     });
@@ -44,27 +44,28 @@ router.post('/like', jwtauth, function(req, res, next) {
 });
 
 router.post('/finish', jwtauth, function(req, res, next) {
-  PlaylistVideo.findOne({where: {id: req.body.video_id}}).then(function(video) {
+  PlaylistVideo.findOne({where: {id: req.body.videoId}}).then(function(video) {
     video.update({active: 0}).then(function(result) {
-      res.io.to("playlist_" + video.playlist_id).emit('action', {type: "DEACTIVATE_VIDEO", video_id: video.id});
-      res.json({success: true});
+      res.io.to("playlist_" + video.playlistId).emit('action', {type: "DEACTIVATE_VIDEO", videoId: video.id});
+      res.json({success: true,  message: 'Video successfully finished.' });
     });
   });
 });
 
 router.post('/start', jwtauth, function(req, res, next) {
-  PlaylistVideo.findOne({where: {id: req.body.video_id}}).then(function(video) {
-    if(!video.started_at) {
-      video.update({started_at: new Date()});
+  PlaylistVideo.findOne({where: {id: req.body.videoId}}).then(function(video) {
+    if(video && !video.startedAt) {
+      video.update({startedAt: new Date()});
+      res.json({success: true,  message: 'Video successfully started.' });
     }
   });
 });
 
 router.post('/delete', jwtauth, function(req, res, next) {
-  PlaylistVideo.findOne({where: {id: req.body.video_id}}).then(function(video) {
+  PlaylistVideo.findOne({where: {id: req.body.videoId}}).then(function(video) {
     video.destroy().then(function(result) {
-      res.io.to("playlist_" + video.playlist_id).emit('action', {type: "REMOVE_VIDEO", video_id: video.id});
-      res.json({success: true});
+      res.io.to("playlist_" + video.playlistId).emit('action', {type: "REMOVE_VIDEO", videoId: video.id});
+      res.json({success: true, message: 'Video successfully deleted'});
     });
   });
 });
