@@ -59,5 +59,5 @@ app.use(function(err, req, res, next) {
   return res.send(err);
 });
 
-app.set('port', process.env.PORT || 4000);
-server.listen(process.env.PORT || 4000);
+app.set('port', process.env.PORT || 3000);
+server.listen(process.env.PORT || 3000);
