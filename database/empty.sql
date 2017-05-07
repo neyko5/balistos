@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `chats` (
   `id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
   `playlistId` int(11) NOT NULL,
   `message` text COLLATE utf8_unicode_ci NOT NULL,
   `createdAt` timestamp NULL DEFAULT NULL,
@@ -62,10 +62,10 @@ CREATE TABLE `playlists` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `playlist_users`
+-- Table structure for table `playlistUsers`
 --
 
-CREATE TABLE `playlist_users` (
+CREATE TABLE `playlistUsers` (
   `id` int(11) NOT NULL,
   `playlistId` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
@@ -76,10 +76,10 @@ CREATE TABLE `playlist_users` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `playlist_videos`
+-- Table structure for table `playlistVideos`
 --
 
-CREATE TABLE `playlist_videos` (
+CREATE TABLE `playlistVideos` (
   `id` int(11) NOT NULL,
   `playlistId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
@@ -140,15 +140,15 @@ ALTER TABLE `playlists`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `playlist_users`
+-- Indexes for table `playlistUsers`
 --
-ALTER TABLE `playlist_users`
+ALTER TABLE `playlistUsers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `playlist_videos`
+-- Indexes for table `playlistVideos`
 --
-ALTER TABLE `playlist_videos`
+ALTER TABLE `playlistVideos`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -183,14 +183,14 @@ ALTER TABLE `likes`
 ALTER TABLE `playlists`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `playlist_users`
+-- AUTO_INCREMENT for table `playlistUsers`
 --
-ALTER TABLE `playlist_users`
+ALTER TABLE `playlistUsers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
--- AUTO_INCREMENT for table `playlist_videos`
+-- AUTO_INCREMENT for table `playlistVideos`
 --
-ALTER TABLE `playlist_videos`
+ALTER TABLE `playlistVideos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `users`
