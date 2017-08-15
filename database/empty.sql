@@ -85,6 +85,7 @@ CREATE TABLE `playlistVideos` (
   `userId` int(11) NOT NULL,
   `videoId` int(11) NOT NULL,
   `active` tinyint(1) DEFAULT '0',
+  `autoAdded` tinyint(1) DEFAULT '0',
   `createdAt` timestamp NULL DEFAULT NULL,
   `updatedAt` timestamp NULL DEFAULT NULL,
   `startedAt` timestamp NULL DEFAULT NULL
