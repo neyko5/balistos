@@ -18,24 +18,22 @@ var User = sequelize.define('user', {
     field: 'password'
   },
 }, {
-  tableName: 'users',
-  instanceMethods: {
-		authenticate: function(password, callback) {
-      bcrypt.compare(password, this.password, function(err, isMatch) {
-        callback(null, isMatch);
-      });
-    }
-	}
+  tableName: 'users'
 });
 
-User.beforeCreate(function(user, options, callback) {
-  bcrypt.genSalt(5, function(err, salt) {
-    if (err) return err;
-    bcrypt.hash(user.password, salt, function(err, hash) {
-      if (err) return next(err);
+User.prototype.authenticate = function(password) {
+  return bcrypt.compare(password, this.password);
+}
+
+User.beforeCreate((user, options) => {
+  return bcrypt.genSalt(5)
+    .then((salt) => {
+      return bcrypt.hash(user.password, salt);
+  }).then((hash) => {
       user.password = hash;
-      callback(null, options);
-    });
+      return options;
+  }).catch((err) => {
+    return err;
   });
 })
 

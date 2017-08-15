@@ -38,10 +38,9 @@ router.post('/register', function(req, res, next) {
 router.post('/login', function(req, res, next) {
   User.findOne({ where: {username: req.body.username}}).then(function(user) {
     if (!user) {
-      res.json({ success: false, message: 'Invalid credentials.' });
+      res.status(401).json({ success: false, message: 'Invalid credentials.' });
     } else if (user) {
-      user.authenticate(req.body.password, function(err, isMatch) {
-        if (err) res.status(401).json({ success: false, message: 'Invalid credentials.'});
+      user.authenticate(req.body.password).then((isMatch) => {
         if (isMatch) {
           var token = jwt.encode({
             id: user.dataValues.id,
@@ -55,9 +54,12 @@ router.post('/login', function(req, res, next) {
             userId: user.dataValues.id,
             username: user.dataValues.username
           });
-        } else {
-           res.status(401).json({ success: false, message: 'Invalid credentials.' });
-        };
+        }
+        else {
+          res.status(401).json({ success: false, message: 'Invalid credentials.' });
+        }
+      }).catch((err) => {
+        res.status(500).json({ success: false, message: 'Error in authentication.'});
       });
     }
   });
