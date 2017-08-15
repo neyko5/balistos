@@ -86,7 +86,8 @@ CREATE TABLE `playlistVideos` (
   `videoId` int(11) NOT NULL,
   `active` tinyint(1) DEFAULT '0',
   `createdAt` timestamp NULL DEFAULT NULL,
-  `updatedAt` timestamp NULL DEFAULT NULL
+  `updatedAt` timestamp NULL DEFAULT NULL,
+  `startedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
