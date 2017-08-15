@@ -17,6 +17,10 @@ var PlaylistVideo = sequelize.define('playlistVideo', {
     type: Sequelize.BOOLEAN,
     field: 'active'
   },
+  active: {
+    type: Sequelize.BOOLEAN,
+    field: 'autoAdded'
+  },
   startedAt:  {
     type     : Sequelize.INTEGER,
     allowNull: true,

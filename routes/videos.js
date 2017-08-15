@@ -16,7 +16,8 @@ router.post('/add', jwtauth, function(req, res, next) {
       userId: req.userId,
       playlistId: req.body.playlistId,
       videoId: video.id,
-      active: 1
+      active: 1,
+      autoAdded: req.body.autoAdded
     }).then(function(playlistVideo){
       PlaylistVideo.findOne({ where: {id: playlistVideo.id}, include: [User, Video, Like]}).then(function(videoResult){
         res.io.to("playlist_" + req.body.playlistId).emit('action', { type: "INSERT_VIDEO", video: videoResult });
