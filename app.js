@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors')
 var routes = require('./routes');
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, {pingTimeout: 30000});
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config()
 }
