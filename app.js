@@ -11,6 +11,9 @@ if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config()
 }
 
+var graphqlHTTP = require('express-graphql');
+var schema = require('./data/schema');
+
 app.options('*', cors());
 app.use(cors());
 
@@ -32,6 +35,11 @@ app.use(function(req, res, next){
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  graphiql: true
+}));
 
 app.use('/', routes);
 
