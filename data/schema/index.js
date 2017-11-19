@@ -5,25 +5,37 @@ import {
     GraphQLString,
     GraphQLList
   } from 'graphql';
-import playlistsSchema from './playlists.js';
-import playlistSchema from './playlist.js';
-import createPlaylistSchema from './createPlaylist.js';
-
+import { getPlaylistsSchema, getPlaylistSchema, getPlaylistUsersSchema, searchPlaylistSchema, heartbeatSchema, createPlaylistSchema } from './playlistSchema.js';
+import { createChatSchema } from './chatSchema.js';
+import { loginSchema, registerSchema, verifyTokenSchema } from './authenticationSchema.js';
+import { addVideoSchema, likeVideoSchema, finishVideoSchema, startVideoSchema, deleteVideoSchema } from './videoSchema.js';
 
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
-    name: 'RootQueryType',
+    name: 'Query',
     fields: {
-      playlists: playlistsSchema,
-      playlist: playlistSchema
+      getPlaylists: getPlaylistsSchema,
+      getPlaylist: getPlaylistSchema,
+      getPlaylistUsers: getPlaylistUsersSchema,
+      searchPlaylist: searchPlaylistSchema,
+      login: loginSchema,
+      verifyToken: verifyTokenSchema
     },
 
   }),
   mutation: new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-      createPlaylist: createPlaylistSchema
+      createPlaylist: createPlaylistSchema,
+      createChat: createChatSchema,
+      addVideo: addVideoSchema,
+      likeVideo: likeVideoSchema,
+      finishVideo: finishVideoSchema,
+      startVideo: startVideoSchema,
+      deleteVideo: deleteVideoSchema,
+      heartbeat: heartbeatSchema,
+      register: registerSchema
     }
   })
 });

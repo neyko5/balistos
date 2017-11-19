@@ -47,12 +47,12 @@ app.use('/graphql', jwt({
 }));
 
 app.use('/graphql', function(req, res, done) {
+  req.context = {}
   if (req.auth && req.auth.exp >= Date.now()) {
-    req.context = {
-      userId: req.auth.id,
-      username: req.auth.username
-    }
+    req.context.userId = req.auth.id;
+    req.context.username = req.auth.username;
   }
+  req.context.io = io;
   done();
 });
 

@@ -7,6 +7,8 @@ import {
     GraphQLBoolean
   } from 'graphql';
 
+import sequelize from '../../database';
+
 import PlaylistVideo from '../../models/playlistVideo';
 import PlaylistUser from '../../models/playlistUser';
 import Video from '../../models/video';
@@ -129,7 +131,7 @@ const PlaylistType = new GraphQLObjectType({
     }
 });
 
-export default {
+export const getPlaylistSchema = {
     type: PlaylistType,
     args: {
         id: {
@@ -140,5 +142,145 @@ export default {
     async resolve(root, args) {
         let playlist = await Playlist.findOne({where: {id: args.id}});
         return playlist;
+    }
+}
+
+const PlaylistWithCount = new GraphQLObjectType({
+    name: 'PlaylistWithCount',
+    fields: {
+      id: { type: new GraphQLNonNull(GraphQLString) },
+      title: { type: new GraphQLNonNull(GraphQLString) },
+      description: { type: new GraphQLNonNull(GraphQLString) },
+      count: { type: new GraphQLNonNull(GraphQLInt) },
+      username: { type: new GraphQLNonNull(GraphQLString) }
+    },
+});
+
+const PlaylistSimple = new GraphQLObjectType({
+    name: 'PlaylistSimple',
+    fields: {
+      id: { type: new GraphQLNonNull(GraphQLString) },
+      title: { type: new GraphQLNonNull(GraphQLString) },
+      description: { type: new GraphQLNonNull(GraphQLString) },
+      user: { type: new GraphQLNonNull(UserType) }
+    },
+});
+
+
+export const getPlaylistsSchema = {
+    type: new GraphQLList(PlaylistWithCount),
+    async resolve(root, args) {
+        let items = await sequelize.query(`SELECT playlists.id, playlists.title, playlists.description, users.username, COUNT(playlistVideos.videoId) as count 
+            FROM users, playlists, playlistVideos 
+            WHERE users.id = playlists.userId AND playlists.id = playlistVideos.playlistId 
+            GROUP BY playlists.id 
+            ORDER BY count DESC`, 
+            { type: sequelize.QueryTypes.SELECT});
+        return items;
+    }
+}
+
+export const getPlaylistUsersSchema = {
+    type: new GraphQLList(UserType),
+    args: {
+        playlistId: {
+          name: 'playlistId',
+          type: new GraphQLNonNull(GraphQLString)
+        }
+    },
+    resolve: async (root, {playlistId}, source) => {
+        let playlistUsers = await PlaylistUser.findAll({
+            where: { playlistId: playlistId, updatedAt: {gt: (new Date() - 60000)}}, 
+            attributes: ['username']});
+        return playlistUsers;
+    }
+}
+
+export const searchPlaylistSchema = {
+    type: new GraphQLList(PlaylistSimple),
+    args: {
+        query: {
+          name: 'query',
+          type: GraphQLString
+        }
+    },
+    resolve: async (root, {query}, source) => {
+        let playlists = await Playlist.findAll({ where: {
+            $or: [
+              {
+                title: {
+                  $like: '%' + query + '%'
+                }
+              },
+              {
+                description: {
+                  $like: '%' + query + '%'
+                }
+              }
+            ]
+        }, limit: 10 , include: [{model: User, attributes: ['username']}]})
+        return playlists;
+    }
+}
+
+export const heartbeatSchema = {
+    type: new GraphQLList(UserType),
+    args: {
+        username: {
+          name: 'username',
+          type: GraphQLString
+        },
+        playlistId: {
+            name: 'playlistId',
+            type: GraphQLString
+          }
+    },
+    resolve: async (root, {username, playlistId}, source) => {
+        const [playlistUser, created] = await PlaylistUser.findOrCreate({ 
+            where: { username: username, 
+                     playlistId: playlistId 
+            }});
+        const update = await PlaylistUser.update(
+            { updatedAt: null },
+            {where: { username: username, playlistId: playlistId }});
+        const playlistUsers = await PlaylistUser.findAll({
+            where: { playlistId: playlistId, 
+                     updatedAt: {gt: (new Date() - 60000)}}, 
+                     attributes: ['username']});
+        return playlistUsers;
+    }
+}
+
+const PlaylistCreateType = new GraphQLObjectType({
+    name: 'PlaylistCreate',
+    fields: {
+      success: { type: new GraphQLNonNull(GraphQLString) },
+      id: { type: new GraphQLNonNull(GraphQLString) },
+    },
+});
+
+export const createPlaylistSchema = {
+    type: PlaylistCreateType,
+    args: {
+      title: {
+        name: 'title',
+        type: GraphQLString
+      },
+      description: {
+        name: 'description',
+        type: GraphQLString
+      }
+    },
+    resolve: async (obj, {title, description}, source, fieldASTs) => {
+        if (source.userId) {
+            let playlist = await Playlist.create({
+                title : title,
+                description: description,
+                userId: source.userId 
+            });
+            return { success: true, id: playlist.id };
+        } else {
+            throw Error('You do not have permission to create playlist.');
+        }
     }
 }

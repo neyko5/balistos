@@ -40,4 +40,8 @@ PlaylistVideo.belongsTo(Video);
 PlaylistVideo.belongsTo(User);
 PlaylistVideo.hasMany(Like);
 
+PlaylistVideo.getFullModel = async (id) => {
+  return PlaylistVideo.findOne({ where: {id: id}, include: [User, Video, Like]});
+} 
+
 module.exports = PlaylistVideo;
