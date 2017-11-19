@@ -1,18 +1,20 @@
-var express = require('express');
-var app = express();
-var path = require('path');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
-var cors = require('cors')
-var routes = require('./routes');
-var server = require('http').Server(app);
-var io = require('socket.io')(server, {pingTimeout: 30000});
-if(process.env.NODE_ENV !== 'production'){
-  require('dotenv').config()
-}
+import express from 'express';
+import path  from 'path';
+import logger from 'morgan';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import http from 'http';
+import routes from './routes';
+import socketio from 'socket.io';
 
-var graphqlHTTP = require('express-graphql');
-var schema = require('./data/schema');
+const app = express();
+const server = http.Server(app);
+const io = socketio(server, {pingTimeout: 30000});
+
+
+
+import graphqlHTTP  from 'express-graphql';
+import schema from './data/schema';
 
 app.options('*', cors());
 app.use(cors());

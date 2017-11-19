@@ -1,9 +1,6 @@
-var User = require('../models/user');
-var jwt = require('jwt-simple');
-if(process.env.NODE_ENV !== 'production'){
-  require('dotenv').load();
-}
-
+import User from '../models/user';
+import jwt from 'jwt-simple';
+import dotenv from 'dotenv';
 
 module.exports = function(req, res, next) {
   if(req.headers && req.headers.authorization){

@@ -1,11 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user');
-var jwt = require('jwt-simple');
-var jwtauth = require('../middleware/jwtauth');
-if(process.env.NODE_ENV !== 'production') {
-  require('dotenv').load();
-}
+import express from 'express';
+
+import User from '../models/user';
+import jwt from 'jwt-simple';
+import jwtauth from '../middleware/jwtauth';
+
+const router = express.Router();
 router.post('/register', function(req, res, next) {
   if(req.body.username && req.body.username.length > 3 && req.body.password && req.body.password.length > 5){
     User.findOne({where: {username: req.body.username}}).then(function(found){

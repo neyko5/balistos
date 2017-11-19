@@ -1,11 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var Video = require('../models/video');
-var User = require('../models/user');
-var Like = require('../models/like');
-var Playlist = require('../models/playlist');
-var PlaylistVideo = require('../models/playlistVideo');
-var jwtauth = require('../middleware/jwtauth');
+import express  from 'express';
+
+import Video from '../models/video';
+import User from '../models/user';
+import Like from '../models/like';
+import Playlist from '../models/playlist';
+import PlaylistVideo from '../models/playlistVideo';
+import jwtauth from '../middleware/jwtauth';
+
+const router = express.Router();
 
 router.post('/add', jwtauth, function(req, res, next) {
   Video.findOrCreate({

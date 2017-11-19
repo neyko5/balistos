@@ -1,5 +1,5 @@
-var sequelize = require('../database');
-var Sequelize = require('sequelize');
+import sequelize from '../database';
+import Sequelize from 'sequelize';
 
 var Video = sequelize.define('video', {
   id: {

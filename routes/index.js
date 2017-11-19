@@ -1,10 +1,11 @@
-var express = require('express');
-var router = express.Router();
-var playlists = require('./playlists');
-var videos = require('./videos');
-var chats = require('./chats');
-var authentication = require('./authentication');
-var app = express();
+import express from 'express';
+import playlists from './playlists';
+import videos from './videos';
+import chats from './chats';
+import authentication from './authentication';
+
+const app = express();
+const router = express.Router();
 
 app.use('/playlists', playlists);
 app.use('/videos', videos);

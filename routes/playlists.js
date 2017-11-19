@@ -1,15 +1,17 @@
-var express = require('express');
-var router = express.Router();
-var Sequelize = require('sequelize');
-var Playlist = require('../models/playlist');
-var PlaylistVideo = require('../models/playlistVideo');
-var PlaylistUser = require('../models/playlistUser');
-var Video = require('../models/video');
-var User = require('../models/user');
-var Chat = require('../models/chat');
-var Like = require('../models/like');
-var jwtauth = require('../middleware/jwtauth');
-var sequelize = require('../database');
+import express from 'express';
+
+import Sequelize from 'sequelize';
+import Playlist from '../models/playlist';
+import PlaylistVideo from '../models/playlistVideo';
+import PlaylistUser from '../models/playlistUser';
+import Video from '../models/video';
+import User from '../models/user';
+import Chat from '../models/chat';
+import Like from '../models/like';
+import jwtauth from '../middleware/jwtauth';
+import sequelize from'../database';
+
+const router = express.Router();
 
 router.get('/search', function(req, res, next) {
   Playlist.findAll({ where: {
