@@ -28,7 +28,8 @@ module.exports = {
           exclude: /node_modules/,
           loader: 'babel-loader',
           query: {
-            "presets": ["latest"]
+            "presets": ["latest"],
+            "plugins": ['transform-regenerator', 'transform-runtime']
           }
         }, 
         {

@@ -6,6 +6,8 @@ import cors from 'cors';
 import http from 'http';
 import routes from './routes';
 import socketio from 'socket.io';
+import sequelize from'./database';
+import jwt from 'express-jwt';
 
 const app = express();
 const server = http.Server(app);
@@ -38,10 +40,28 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  graphiql: true
+app.use('/graphql', jwt({
+  secret: process.env.SECRET,
+  requestProperty: 'auth',
+  credentialsRequired: false,
 }));
+
+app.use('/graphql', function(req, res, done) {
+  if (req.auth && req.auth.exp >= Date.now()) {
+    req.context = {
+      userId: req.auth.id,
+      username: req.auth.username
+    }
+  }
+  done();
+});
+
+app.use('/graphql', graphqlHTTP(req => ({
+    schema: schema,
+    context: req.context,
+    graphiql: true
+  })
+));
 
 app.use('/', routes);
 
