@@ -3,6 +3,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals')
+const Dotenv = require('dotenv-webpack')
 
 module.exports = {
   entry: [
@@ -17,6 +18,10 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new Dotenv({
+        path: path.join(__dirname, '../.env'),
+        safe: true
+    })
   ],
   externals: [
     nodeExternals()
