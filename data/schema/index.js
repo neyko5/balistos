@@ -1,14 +1,14 @@
-import {
+var {
     graphql,
     GraphQLSchema,
     GraphQLObjectType,
     GraphQLString,
     GraphQLList
-  } from 'graphql';
-import { getPlaylistsSchema, getPlaylistSchema, getPlaylistUsersSchema, searchPlaylistSchema, heartbeatSchema, createPlaylistSchema } from './playlistSchema.js';
-import { createChatSchema } from './chatSchema.js';
-import { loginSchema, registerSchema, verifyTokenSchema } from './authenticationSchema.js';
-import { addVideoSchema, likeVideoSchema, finishVideoSchema, startVideoSchema, deleteVideoSchema } from './videoSchema.js';
+  } = require('graphql');
+var { getPlaylistsSchema, getPlaylistSchema, getPlaylistUsersSchema, searchPlaylistSchema, heartbeatSchema, createPlaylistSchema } = require('./playlistSchema.js');
+var { createChatSchema } = require('./chatSchema.js');
+var { loginSchema, registerSchema, verifyTokenSchema } = require('./authenticationSchema.js');
+var { addVideoSchema, likeVideoSchema, finishVideoSchema, startVideoSchema, deleteVideoSchema } = require('./videoSchema.js');
 
 
 var schema = new GraphQLSchema({

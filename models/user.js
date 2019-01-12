@@ -1,6 +1,6 @@
-import sequelize from '../database';
-import Sequelize from 'sequelize';
-import bcrypt from 'bcrypt';
+var sequelize = require('../database');
+var Sequelize = require('sequelize');
+var bcrypt = require('bcrypt');
 
 var User = sequelize.define('user', {
   id: {

@@ -1,8 +1,8 @@
-import express from 'express';
+var express = require('express');
 
-import Chat  from '../models/chat';
-import User from '../models/user';
-import jwtauth from '../middleware/jwtauth';
+var Chat  = require('../models/chat');
+var User = require('../models/user');
+var jwtauth = require('../middleware/jwtauth');
 
 const router = express.Router();
 

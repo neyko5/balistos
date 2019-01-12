@@ -1,13 +1,13 @@
-import express from 'express';
-import path  from 'path';
-import logger from 'morgan';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import http from 'http';
-import routes from './routes';
-import socketio from 'socket.io';
-import sequelize from'./database';
-import jwt from 'express-jwt';
+var express = require('express');
+var path = require('path');
+var logger = require('morgan');
+var bodyParser = require('body-parser');
+var cors = require('cors');
+var http  = require('http');
+var routes  = require('./routes');
+var socketio = require('socket.io');
+var sequelize = require('./database');
+var jwt = require( 'express-jwt');
 
 const app = express();
 const server = http.Server(app);
@@ -15,8 +15,8 @@ const io = socketio(server, {pingTimeout: 30000});
 
 
 
-import graphqlHTTP  from 'express-graphql';
-import schema from './data/schema';
+var graphqlHTTP  = require('express-graphql');
+var schema = require('./data/schema');
 
 app.options('*', cors());
 app.use(cors());
@@ -39,6 +39,8 @@ app.use(function(req, res, next){
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+console.log(process.env);
 
 app.use('/graphql', jwt({
   secret: process.env.SECRET,

@@ -1,6 +1,6 @@
-import sequelize from '../database';
-import Sequelize from 'sequelize';
-import User from './user';
+var sequelize = require('../database');
+var Sequelize = require('sequelize');
+var User = require('./user');
 
 var Like = sequelize.define('likes', {
   id: {

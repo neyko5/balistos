@@ -1,11 +1,11 @@
-import {
+var {
     GraphQLString,
     GraphQLObjectType,
     GraphQLNonNull,
     GraphQLInt
-  } from 'graphql';
+  } = require('graphql');
 
-import Chat from '../../models/chat';
+var Chat = require('../../models/chat');
 
 const ChatCreateType = new GraphQLObjectType({
     name: 'ChatCreate',
@@ -14,7 +14,7 @@ const ChatCreateType = new GraphQLObjectType({
     },
 });
 
-export const createChatSchema = {
+const createChatSchema = {
     type: ChatCreateType,
     args: {
       message: {
@@ -43,4 +43,8 @@ export const createChatSchema = {
             throw Error('You do not have permission to send chat message.');
         }
     }
+}
+
+module.exports = {
+    createChatSchema
 }

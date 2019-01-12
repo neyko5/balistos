@@ -19,5 +19,9 @@ module.exports =  webpackMerge(commonConfig, {
     new ReloadServerPlugin({
       script: "dev/main.js",
     }),
+    new Dotenv({
+      path: path.join(__dirname, '../.env'),
+      safe: true
+    })
   ]
 });

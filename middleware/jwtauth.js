@@ -1,6 +1,6 @@
-import User from '../models/user';
-import jwt from 'jwt-simple';
-import dotenv from 'dotenv';
+var User = require('../models/user');
+var jwt = require('jwt-simple');
+var dotenv = require('dotenv');
 
 module.exports = function(req, res, next) {
   if(req.headers && req.headers.authorization){

@@ -1,11 +1,11 @@
-import express  from 'express';
+var express  = require('express');
 
-import Video from '../models/video';
-import User from '../models/user';
-import Like from '../models/like';
-import Playlist from '../models/playlist';
-import PlaylistVideo from '../models/playlistVideo';
-import jwtauth from '../middleware/jwtauth';
+var Video = require('../models/video');
+var User = require('../models/user');
+var Like = require('../models/like');
+var Playlist = require('../models/playlist');
+var PlaylistVideo = require('../models/playlistVideo');
+var jwtauth = require('../middleware/jwtauth');
 
 const router = express.Router();
 

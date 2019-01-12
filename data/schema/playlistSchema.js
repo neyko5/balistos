@@ -1,21 +1,21 @@
-import {
+var {
     GraphQLObjectType,
     GraphQLNonNull,
     GraphQLString,
     GraphQLInt,
     GraphQLList,
     GraphQLBoolean
-  } from 'graphql';
+  } = require('graphql');
 
-import sequelize from '../../database';
+var sequelize = require('../../database');
 
-import PlaylistVideo from '../../models/playlistVideo';
-import PlaylistUser from '../../models/playlistUser';
-import Video from '../../models/video';
-import User from '../../models/user';
-import Chat from '../../models/chat';
-import Like from '../../models/like';
-import Playlist from '../../models/playlist';
+var PlaylistVideo = require('../../models/playlistVideo');
+var PlaylistUser = require('../../models/playlistUser');
+var Video = require('../../models/video');
+var User = require('../../models/user');
+var Chat = require('../../models/chat');
+var Like = require('../../models/like');
+var Playlist = require('../../models/playlist');
 
 const UserType = new GraphQLObjectType({
     name: 'User',
@@ -131,7 +131,7 @@ const PlaylistType = new GraphQLObjectType({
     }
 });
 
-export const getPlaylistSchema = {
+const getPlaylistSchema = {
     type: PlaylistType,
     args: {
         id: {
@@ -167,11 +167,11 @@ const PlaylistSimple = new GraphQLObjectType({
 });
 
 
-export const getPlaylistsSchema = {
+const getPlaylistsSchema = {
     type: new GraphQLList(PlaylistWithCount),
     async resolve(root, args) {
         let items = await sequelize.query(`SELECT playlists.id, playlists.title, playlists.description, users.username, COUNT(playlistVideos.videoId) as count 
-            FROM users, playlists, playlistVideos 
+            from users, playlists, playlistVideos 
             WHERE users.id = playlists.userId AND playlists.id = playlistVideos.playlistId 
             GROUP BY playlists.id 
             ORDER BY count DESC`, 
@@ -180,7 +180,7 @@ export const getPlaylistsSchema = {
     }
 }
 
-export const getPlaylistUsersSchema = {
+const getPlaylistUsersSchema = {
     type: new GraphQLList(UserType),
     args: {
         playlistId: {
@@ -196,7 +196,7 @@ export const getPlaylistUsersSchema = {
     }
 }
 
-export const searchPlaylistSchema = {
+const searchPlaylistSchema = {
     type: new GraphQLList(PlaylistSimple),
     args: {
         query: {
@@ -223,7 +223,7 @@ export const searchPlaylistSchema = {
     }
 }
 
-export const heartbeatSchema = {
+const heartbeatSchema = {
     type: new GraphQLList(UserType),
     args: {
         username: {
@@ -259,7 +259,7 @@ const PlaylistCreateType = new GraphQLObjectType({
     },
 });
 
-export const createPlaylistSchema = {
+const createPlaylistSchema = {
     type: PlaylistCreateType,
     args: {
       title: {
@@ -283,4 +283,13 @@ export const createPlaylistSchema = {
             throw Error('You do not have permission to create playlist.');
         }
     }
+}
+
+module.exports = {
+    getPlaylistSchema,
+    getPlaylistsSchema,
+    getPlaylistUsersSchema,
+    searchPlaylistSchema,
+    heartbeatSchema,
+    createPlaylistSchema
 }

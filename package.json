@@ -7,7 +7,7 @@
     "build": "rimraf dist && cross-env NODE_ENV=production webpack --config ./config/webpack.prod.config.js --progress --profile --colors"
   },
   "dependencies": {
-    "bcrypt": "1.0.3",
+    "bcrypt": "3.0.3",
     "body-parser": "1.18.2",
     "cors": "2.8.4",
     "express": "4.16.2",

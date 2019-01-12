@@ -1,15 +1,15 @@
-import {
+var {
   GraphQLString,
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLInt,
   GraphQLBoolean
-} from 'graphql';
+} = require('graphql');
 
-import Video from '../../models/video';
-import User from '../../models/user';
-import Like from '../../models/like';
-import PlaylistVideo from '../../models/playlistVideo';
+var Video = require('../../models/video');
+var User = require('../../models/user');
+var Like = require('../../models/like');
+var PlaylistVideo = require('../../models/playlistVideo');
 
 const VideoResponseType = new GraphQLObjectType({
   name: 'VideoResponse',
@@ -18,7 +18,7 @@ const VideoResponseType = new GraphQLObjectType({
   },
 });
 
-export const addVideoSchema = {
+const addVideoSchema = {
   type: VideoResponseType,
   args: {
     youtubeId: {
@@ -60,7 +60,7 @@ export const addVideoSchema = {
   }
 }
 
-export const likeVideoSchema = {
+const likeVideoSchema = {
   type: VideoResponseType,
   args: {
     videoId: {
@@ -88,7 +88,7 @@ export const likeVideoSchema = {
   }
 }
 
-export const finishVideoSchema = {
+const finishVideoSchema = {
   type: VideoResponseType,
   args: {
     videoId: {
@@ -108,7 +108,7 @@ export const finishVideoSchema = {
   }
 }
 
-export const startVideoSchema = {
+const startVideoSchema = {
   type: VideoResponseType,
   args: {
     videoId: {
@@ -129,7 +129,7 @@ export const startVideoSchema = {
   }
 }
 
-export const deleteVideoSchema = {
+const deleteVideoSchema = {
   type: VideoResponseType,
   args: {
     videoId: {
@@ -152,4 +152,12 @@ export const deleteVideoSchema = {
           throw Error('You do not have permission to finish video.');
       }
   }
+}
+
+module.exports = {
+  addVideoSchema,
+  likeVideoSchema,
+  finishVideoSchema,
+  startVideoSchema,
+  deleteVideoSchema
 }

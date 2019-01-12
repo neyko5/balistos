@@ -1,10 +1,10 @@
-import sequelize from '../database';
-import Sequelize from 'sequelize';
+var sequelize = require('../database');
+var Sequelize = require('sequelize');
 
-import Playlist from './playlist';
-import User from './user';
-import Video from './video';
-import Like from './like';
+var Playlist = require('./playlist');
+var User = require('./user');
+var Video = require('./video');
+var Like = require('./like');
 
 var PlaylistVideo = sequelize.define('playlistVideo', {
   id: {

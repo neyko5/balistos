@@ -1,8 +1,8 @@
-import express from 'express';
-import playlists from './playlists';
-import videos from './videos';
-import chats from './chats';
-import authentication from './authentication';
+var express = require('express');
+var playlists = require('./playlists');
+var videos = require('./videos');
+var chats = require('./chats');
+var authentication = require('./authentication');
 
 const app = express();
 const router = express.Router();

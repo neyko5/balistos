@@ -1,14 +1,14 @@
-import {
+var {
     GraphQLString,
     GraphQLObjectType,
     GraphQLNonNull,
     GraphQLInt,
     GraphQLBoolean
-  } from 'graphql';
+  } = require('graphql');
 
-import jwt from 'jwt-simple';
+var jwt = require('jwt-simple');
 
-import User from '../../models/user';
+var User = require('../../models/user');
 
 const AuthenticatedUserType = new GraphQLObjectType({
     name: 'AuthenticatedUser',
@@ -20,7 +20,7 @@ const AuthenticatedUserType = new GraphQLObjectType({
     },
 });
 
-export const loginSchema = {
+const loginSchema = {
     type: AuthenticatedUserType,
     args: {
       username: {
@@ -58,7 +58,7 @@ export const loginSchema = {
     }
 }
 
-export const registerSchema = {
+const registerSchema = {
     type: AuthenticatedUserType,
     args: {
       username: {
@@ -103,7 +103,7 @@ const VerifyResponseType = new GraphQLObjectType({
     },
   });
 
-export const verifyTokenSchema = {
+const verifyTokenSchema = {
     type: VerifyResponseType,
     resolve: async (obj, args, source, fieldASTs) => {
         if (source.userId) {
@@ -112,4 +112,10 @@ export const verifyTokenSchema = {
             throw Error('Token is invalid.');
         }
     }
+}
+
+module.exports = {
+    loginSchema,
+    registerSchema,
+    verifyTokenSchema
 }

@@ -17,11 +17,7 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.NamedModulesPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new Dotenv({
-        path: path.join(__dirname, '../.env'),
-        safe: true
-    })
+    new webpack.NoEmitOnErrorsPlugin()
   ],
   externals: [
     nodeExternals()

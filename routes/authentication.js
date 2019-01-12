@@ -1,8 +1,8 @@
-import express from 'express';
+var express = require('express');
 
-import User from '../models/user';
-import jwt from 'jwt-simple';
-import jwtauth from '../middleware/jwtauth';
+var User = require('../models/user');
+var jwt = require('jwt-simple');
+var jwtauth = require('../middleware/jwtauth');
 
 const router = express.Router();
 router.post('/register', function(req, res, next) {
