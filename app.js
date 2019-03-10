@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
@@ -8,6 +9,7 @@ var routes  = require('./routes');
 var socketio = require('socket.io');
 var sequelize = require('./database');
 var jwt = require( 'express-jwt');
+
 
 const app = express();
 const server = http.Server(app);

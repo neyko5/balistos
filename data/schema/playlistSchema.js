@@ -20,7 +20,7 @@ var Playlist = require('../../models/playlist');
 const UserType = new GraphQLObjectType({
     name: 'User',
     fields: {
-      id: { type: new GraphQLNonNull(GraphQLString) },
+      id: { type: new GraphQLNonNull(GraphQLInt) },
       username: { type: new GraphQLNonNull(GraphQLString) }
     }
 });
@@ -28,7 +28,7 @@ const UserType = new GraphQLObjectType({
 const LikeType = new GraphQLObjectType({
     name: 'Like',
     fields: {
-        id: { type: new GraphQLNonNull(GraphQLString) },
+        id: { type: new GraphQLNonNull(GraphQLInt) },
         value: { type: new GraphQLNonNull(GraphQLInt) },
         createdAt: { type: new GraphQLNonNull(GraphQLString) },
         user: { 
@@ -44,7 +44,7 @@ const LikeType = new GraphQLObjectType({
 const VideoType = new GraphQLObjectType({
     name: 'Video',
     fields: () => ({
-        id: { type: new GraphQLNonNull(GraphQLString) },
+        id: { type: new GraphQLNonNull(GraphQLInt) },
         title: { type: new GraphQLNonNull(GraphQLString) },
         youtubeId: { type: new GraphQLNonNull(GraphQLString) },
         createdAt: { type: new GraphQLNonNull(GraphQLString) },
@@ -54,7 +54,7 @@ const VideoType = new GraphQLObjectType({
 const ChatType = new GraphQLObjectType({
     name: 'Chat',
     fields: () => ({
-        id: { type: new GraphQLNonNull(GraphQLString) },
+        id: { type: new GraphQLNonNull(GraphQLInt) },
         message: { type: new GraphQLNonNull(GraphQLString) },
         createdAt: { type: new GraphQLNonNull(GraphQLString) },
         user: { 
@@ -70,8 +70,8 @@ const ChatType = new GraphQLObjectType({
 const PlaylistVideoType = new GraphQLObjectType({
     name: 'PlaylistVideo',
     fields: () => ({
-        id: { type: new GraphQLNonNull(GraphQLString) },
-        playlistId: { type: new GraphQLNonNull(GraphQLString) },
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        playlistId: { type: new GraphQLNonNull(GraphQLInt) },
         active: { type: new GraphQLNonNull(GraphQLBoolean) },
         startedAt: { type: new GraphQLNonNull(GraphQLInt) },
         autoAdded: { type: new GraphQLNonNull(GraphQLBoolean) },
@@ -104,7 +104,7 @@ const PlaylistVideoType = new GraphQLObjectType({
 const PlaylistType = new GraphQLObjectType({
     name: 'Playlist',
     fields: {
-        id: { type: new GraphQLNonNull(GraphQLString) },
+        id: { type: new GraphQLNonNull(GraphQLInt) },
         title: { type: new GraphQLNonNull(GraphQLString) },
         description: { type: new GraphQLNonNull(GraphQLString) },
         playlistVideos: { 
@@ -148,7 +148,7 @@ const getPlaylistSchema = {
 const PlaylistWithCount = new GraphQLObjectType({
     name: 'PlaylistWithCount',
     fields: {
-      id: { type: new GraphQLNonNull(GraphQLString) },
+      id: { type: new GraphQLNonNull(GraphQLInt) },
       title: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: new GraphQLNonNull(GraphQLString) },
       count: { type: new GraphQLNonNull(GraphQLInt) },
@@ -159,7 +159,7 @@ const PlaylistWithCount = new GraphQLObjectType({
 const PlaylistSimple = new GraphQLObjectType({
     name: 'PlaylistSimple',
     fields: {
-      id: { type: new GraphQLNonNull(GraphQLString) },
+      id: { type: new GraphQLNonNull(GraphQLInt) },
       title: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: new GraphQLNonNull(GraphQLString) },
       user: { type: new GraphQLNonNull(UserType) }
@@ -185,7 +185,7 @@ const getPlaylistUsersSchema = {
     args: {
         playlistId: {
           name: 'playlistId',
-          type: new GraphQLNonNull(GraphQLString)
+          type: new GraphQLNonNull(GraphQLInt)
         }
     },
     resolve: async (root, {playlistId}, source) => {
@@ -232,7 +232,7 @@ const heartbeatSchema = {
         },
         playlistId: {
             name: 'playlistId',
-            type: GraphQLString
+            type: GraphQLInt
           }
     },
     resolve: async (root, {username, playlistId}, source) => {
@@ -255,7 +255,7 @@ const PlaylistCreateType = new GraphQLObjectType({
     name: 'PlaylistCreate',
     fields: {
       success: { type: new GraphQLNonNull(GraphQLString) },
-      id: { type: new GraphQLNonNull(GraphQLString) },
+      id: { type: new GraphQLNonNull(GraphQLInt) },
     },
 });
 

@@ -1,6 +1,5 @@
 var User = require('../models/user');
 var jwt = require('jwt-simple');
-var dotenv = require('dotenv');
 
 module.exports = function(req, res, next) {
   if(req.headers && req.headers.authorization){

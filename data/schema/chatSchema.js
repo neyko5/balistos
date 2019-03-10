@@ -23,7 +23,7 @@ const createChatSchema = {
       },
       playlistId: {
         name: 'playlistId',
-        type: GraphQLString
+        type: GraphQLInt
       }
     },
     resolve: async (obj, {message, playlistId}, source, fieldASTs) => {

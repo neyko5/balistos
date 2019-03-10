@@ -65,7 +65,7 @@ const likeVideoSchema = {
   args: {
     videoId: {
       name: 'videoId',
-      type: GraphQLString
+      type: GraphQLInt
     },
     value: {
       name: 'value',
@@ -93,7 +93,7 @@ const finishVideoSchema = {
   args: {
     videoId: {
       name: 'videoId',
-      type: GraphQLString
+      type: GraphQLInt
     },
   },
   resolve: async (obj, {videoId}, source, fieldASTs) => {
@@ -113,7 +113,7 @@ const startVideoSchema = {
   args: {
     videoId: {
       name: 'videoId',
-      type: GraphQLString
+      type: GraphQLInt
     },
   },
   resolve: async (obj, {videoId}, source, fieldASTs) => {
@@ -134,7 +134,7 @@ const deleteVideoSchema = {
   args: {
     videoId: {
       name: 'videoId',
-      type: GraphQLString
+      type: GraphQLInt
     },
   },
   resolve: async (obj, {videoId}, source, fieldASTs) => {
