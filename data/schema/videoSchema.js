@@ -31,7 +31,7 @@ const addVideoSchema = {
     },
     playlistId: {
       name: 'playlistId',
-      type: GraphQLString
+      type: GraphQLInt
     },
     autoAdded: {
       name: 'autoAdded',

@@ -14,7 +14,6 @@ router.post('/send', jwtauth, function(req, res, next) {
   }).then(function(message){
         User.findOne({where:{id: req.userId}}).then(function(user){
           message.dataValues.user = user.dataValues;
-          console.log("emitting to ", "playlist_" + req.body.playlistId)
           res.io.to("playlist_" + req.body.playlistId).emit('action', { type: "INSERT_MESSAGE", message: message.dataValues });
           res.status(201).json({ success: true, message: 'Chat message was successfully submitted' });
         });

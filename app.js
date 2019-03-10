@@ -42,8 +42,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-console.log(process.env);
-
 app.use('/graphql', jwt({
   secret: process.env.SECRET,
   requestProperty: 'auth',
