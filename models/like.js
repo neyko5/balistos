@@ -19,7 +19,7 @@ var Like = sequelize.define('likes', {
 
 Like.belongsTo(User);
 
-Like.getLikeWithUser = async (id) => {
+Like.getLikeWithUser = function(id) {
   return Like.findOne({ where: {id: id}, include: [{model: User, attributes: ['username']}]})
 }
 
